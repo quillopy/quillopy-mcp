@@ -74,7 +74,7 @@ function formatDocument(document: Document): string {
 
 // Register tool
 server.tool(
-  "search-library-docs",
+  "search_library_docs",
   "Search and retrieve relevant documentation for programming libraries and packages.",
   {
     query: z
