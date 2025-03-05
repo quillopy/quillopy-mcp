@@ -2,7 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-const QUILLOPY_API_BASE = "http://localhost:8000/v1";
+const QUILLOPY_API_BASE = "https://quillopy.fly.dev/v1";
 
 // Create server instance
 const server = new McpServer({
@@ -35,8 +35,6 @@ async function makeQuillopyRequest({
   language: string;
   namespace?: string;
 }): Promise<Document[] | null> {
-  // TODO headers with authentication
-
   try {
     const url = `${QUILLOPY_API_BASE}/document-search`;
 
@@ -50,7 +48,7 @@ async function makeQuillopyRequest({
 
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" }, // TODO headers with authentication
       body: JSON.stringify(requestBody),
     });
 
