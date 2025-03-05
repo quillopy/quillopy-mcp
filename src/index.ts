@@ -5,17 +5,10 @@ import { z } from "zod";
 const QUILLOPY_API_BASE = "http://localhost:8000/v1";
 
 // Create server instance
-const server = new McpServer(
-  {
-    name: "quillopy",
-    version: "1.0.0",
-  },
-  {
-    capabilities: {
-      tools: {},
-    },
-  }
-);
+const server = new McpServer({
+  name: "quillopy",
+  version: "1.0.0",
+});
 
 interface Document {
   link: string;
@@ -57,7 +50,7 @@ async function makeQuillopyRequest({
 
     const response = await fetch(url, {
       method: "POST",
-      headers: {},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
     });
 
@@ -125,7 +118,8 @@ server.tool(
       };
     }
 
-    const formattedDocs = documents.map(formatDocument);
+    // Use 10 first documents
+    const formattedDocs = documents.slice(0, 10).map(formatDocument);
 
     return {
       content: [
