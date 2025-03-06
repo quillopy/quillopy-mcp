@@ -48,6 +48,63 @@ Add this to your `claude_desktop_config.json`:
 }
 ```
 
+## Usage with Cursor
+
+1. Navigate to Cursor Settings > features
+2. Enable the MCP Servers option
+3. Add new MCP server with:
+   ```json
+   {
+     "name": "quillopy",
+     "type": "command",
+     "command": "node",
+     "args": ["/path/to/quillopy-mcp/build/index.js"]
+   }
+   ```
+
+## Usage with Continue.dev
+
+1. Open your Continue.dev configuration file in either format:
+
+   - YAML:
+     - MacOS/Linux: `~/.continue/config.yaml`
+     - Windows: `%USERPROFILE%\.continue\config.yaml`
+   - JSON:
+     - Same location as above, but named `config.json`
+
+2. Add the configuration using either format:
+
+   YAML format:
+
+   ```yaml
+   experimental:
+     modelContextProtocolServers:
+       - transport:
+           type: stdio
+           command: node
+           args: ["/path/to/quillopy-mcp/build/index.js"]
+   ```
+
+   JSON format:
+
+   ```json
+   {
+     "experimental": {
+       "modelContextProtocolServers": [
+         {
+           "transport": {
+             "type": "stdio",
+             "command": "node",
+             "args": ["/path/to/quillopy-mcp/build/index.js"]
+           }
+         }
+       ]
+     }
+   }
+   ```
+
+3. Save the file - Continue will automatically refresh to apply the new configuration
+
 ## Development
 
 - Source code is in the `src/` directory
