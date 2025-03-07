@@ -13,6 +13,10 @@ This MCP server allows AI assistants to search package documentation through the
 - Namespace filtering
 - Formatted document responses with semantic identifiers and links
 
+## How to Use
+
+Invoke the Quillopy tool directly in conversation by typing `@quillopy` or `@quillopy[package_name]`. You can then specify your query, programming language, and optionally a namespace to narrow the search. The tool will retrieve and display relevant documentation and links.
+
 ## Installation
 
 1. Clone this repository:
