@@ -1,9 +1,12 @@
+#!/usr/bin/env node
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
 const QUILLOPY_API_BASE = "https://quillopy.fly.dev/v1";
-const VERSION = "1.0.0";
+const VERSION = "0.1.0";
+const API_KEY = process.env.QUILLOPY_API_KEY;
 
 const server = new McpServer({
   name: "quillopy",
@@ -45,9 +48,19 @@ async function makeQuillopyRequest({
     if (common_name) requestBody.common_name = common_name;
     if (language) requestBody.language = language;
 
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (API_KEY) {
+      headers["Authorization"] = `Bearer ${API_KEY}`;
+    } else {
+      console.warn("Warning: QUILLOPY_API_KEY environment variable not set");
+    }
+
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(requestBody),
     });
 
@@ -57,7 +70,7 @@ async function makeQuillopyRequest({
 
     return (await response.json()) as ApiResponse;
   } catch (error) {
-    console.error("Error making Quillopy request: ", error);
+    console.error("Error making quillopy request: ", error);
     return null;
   }
 }
