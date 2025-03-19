@@ -3,21 +3,15 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 
 const QUILLOPY_API_BASE = "https://quillopy.fly.dev/v1";
+const VERSION = "1.0.0";
 
 const server = new McpServer({
   name: "quillopy",
-  version: "1.0.0",
+  version: VERSION,
 });
 
-interface Document {
-  link: string;
-  content: string;
-  semantic_identifier: string;
-}
-
 interface ApiResponse {
-  instructions: string[];
-  documents: Document[];
+  text: string;
 }
 
 interface RequestBody {
@@ -25,6 +19,7 @@ interface RequestBody {
   package_name?: string;
   common_name?: string;
   language?: string;
+  version: string;
 }
 
 async function makeQuillopyRequest({
@@ -43,6 +38,7 @@ async function makeQuillopyRequest({
 
     const requestBody: RequestBody = {
       query,
+      version: VERSION,
     };
 
     if (package_name) requestBody.package_name = package_name;
@@ -64,14 +60,6 @@ async function makeQuillopyRequest({
     console.error("Error making Quillopy request: ", error);
     return null;
   }
-}
-
-function formatDocument(document: Document): string {
-  return [
-    `Semantic Identifier: ${document.semantic_identifier}`,
-    `Link: ${document.link}`,
-    `Content: ${document.content}`,
-  ].join("\n");
 }
 
 server.tool(
@@ -108,36 +96,22 @@ server.tool(
       common_name: common_name?.toLowerCase(),
     });
 
-    if (!response || !response.documents || response.documents.length === 0) {
+    if (!response) {
       return {
         content: [
           {
             type: "text",
-            text: "No documentation found.",
+            text: "Error: Unable to retrieve documentation.",
           },
         ],
       };
-    }
-
-    const formattedDocs = response.documents.slice(0, 10).map(formatDocument);
-
-    let instructionsText = "";
-    if (response.instructions && response.instructions.length > 0) {
-      instructionsText =
-        "Instructions:\n" +
-        response.instructions
-          .map((instruction) => `- ${instruction}`)
-          .join("\n") +
-        "\n\n";
     }
 
     return {
       content: [
         {
           type: "text",
-          text: `Found the following relevant library documentation:\n\n${formattedDocs.join(
-            "\n\n"
-          )}\n\n${instructionsText}`,
+          text: response.text,
         },
       ],
     };
