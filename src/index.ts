@@ -22,32 +22,31 @@ interface ApiResponse {
 
 interface RequestBody {
   query: string;
-  package_name: string;
+  documentation_name: string;
+  installation_name: string;
   language: string;
-  namespace?: string;
 }
 
 async function makeQuillopyRequest({
   query,
-  package_name,
+  documentation_name,
+  installation_name,
   language,
-  namespace,
 }: {
   query: string;
-  package_name: string;
+  documentation_name: string;
+  installation_name: string;
   language: string;
-  namespace?: string;
 }): Promise<ApiResponse | null> {
   try {
     const url = `${QUILLOPY_API_BASE}/document-search`;
 
     const requestBody: RequestBody = {
       query,
-      package_name,
+      documentation_name,
+      installation_name,
       language,
     };
-
-    if (namespace) requestBody.namespace = namespace;
 
     const response = await fetch(url, {
       method: "POST",
@@ -76,34 +75,33 @@ function formatDocument(document: Document): string {
 
 server.tool(
   "quillopy_search",
-  "This MCP searches and fetches documentation for programming libraries and packages. When a user types @quillopy or @quillopy[package_name], they are requesting to use this tool to access programming documentation.",
+  "This MCP searches and fetches documentation for programming libraries, packages, and frameworks. When a user types @quillopy or @quillopy[package_name], they are requesting to use this tool to access programming documentation.",
   {
     query: z
       .string()
       .describe("The search query to find specific documentation"),
-    package_name: z
+    documentation_name: z
       .string()
       .describe(
-        "The name of the library or package to search documentation for"
+        "Common name to refer to the package/framework to search, e.g. sklearn"
+      ),
+    installation_name: z
+      .string()
+      .describe(
+        "Name used to install the package/framework. E.g. scikit-learn for `pip install scikit-learn`"
       ),
     language: z
       .string()
       .describe(
         "The programming language of the package (e.g., python, javascript, java)"
       ),
-    namespace: z
-      .string()
-      .optional()
-      .describe(
-        "Optional namespace or module within the package to narrow the search"
-      ),
   },
-  async ({ query, package_name, language, namespace }) => {
+  async ({ query, documentation_name, installation_name, language }) => {
     const response = await makeQuillopyRequest({
       query,
-      package_name: package_name.toLowerCase(),
+      documentation_name: documentation_name.toLowerCase(),
+      installation_name: installation_name.toLowerCase(),
       language: language.toLowerCase(),
-      namespace: namespace?.toLowerCase(),
     });
 
     if (!response || !response.documents || response.documents.length === 0) {
