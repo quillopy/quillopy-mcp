@@ -9,15 +9,8 @@ const server = new McpServer({
   version: "1.0.0",
 });
 
-interface Document {
-  link: string;
-  content: string;
-  semantic_identifier: string;
-}
-
 interface ApiResponse {
-  instructions: string[];
-  documents: Document[];
+  response: string;
 }
 
 interface RequestBody {
@@ -65,14 +58,6 @@ async function makeQuillopyRequest({
   }
 }
 
-function formatDocument(document: Document): string {
-  return [
-    `Semantic Identifier: ${document.semantic_identifier}`,
-    `Link: ${document.link}`,
-    `Content: ${document.content}`,
-  ].join("\n");
-}
-
 server.tool(
   "quillopy_search",
   "This MCP searches and fetches documentation for programming libraries, packages, and frameworks. When a user types @quillopy or @quillopy[package_name], they are requesting to use this tool to access programming documentation.",
@@ -104,36 +89,22 @@ server.tool(
       language: language.toLowerCase(),
     });
 
-    if (!response || !response.documents || response.documents.length === 0) {
+    if (!response) {
       return {
         content: [
           {
             type: "text",
-            text: "No documentation found.",
+            text: "Unable to retrieve documentation. The service might be unavailable or experiencing issues. Please check your internet connection and try again later.",
           },
         ],
       };
-    }
-
-    const formattedDocs = response.documents.slice(0, 10).map(formatDocument);
-
-    let instructionsText = "";
-    if (response.instructions && response.instructions.length > 0) {
-      instructionsText =
-        "Instructions:\n" +
-        response.instructions
-          .map((instruction) => `- ${instruction}`)
-          .join("\n") +
-        "\n\n";
     }
 
     return {
       content: [
         {
           type: "text",
-          text: `Found the following relevant library documentation:\n\n${formattedDocs.join(
-            "\n\n"
-          )}\n\n${instructionsText}`,
+          text: response.response,
         },
       ],
     };
