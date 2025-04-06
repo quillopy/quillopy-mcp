@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const QUILLOPY_API_BASE = "https://quillopy.fly.dev/v1";
 const VERSION = "0.1.0";
-const API_KEY = process.env.QUILLOPY_API_KEY;
+const QUILLOPY_API_KEY = process.env.QUILLOPY_API_KEY;
 
 const server = new McpServer({
   name: "quillopy",
@@ -52,8 +52,8 @@ async function makeQuillopyRequest({
       "Content-Type": "application/json",
     };
 
-    if (API_KEY) {
-      headers["Authorization"] = `Bearer ${API_KEY}`;
+    if (QUILLOPY_API_KEY) {
+      headers["Authorization"] = `Bearer ${QUILLOPY_API_KEY}`;
     } else {
       console.warn("Warning: QUILLOPY_API_KEY environment variable not set");
     }
