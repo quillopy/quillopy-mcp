@@ -1,12 +1,12 @@
+import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
 
-const QUILLOPY_API_BASE = "https://quillopy.fly.dev/v1"; // "http://0.0.0.0:8000";
+const QUILLOPY_API_BASE = "https://api.quillopy.com/v1";
 
 const server = new McpServer({
   name: "quillopy",
-  version: "1.0.0",
+  version: "0.1.0",
 });
 
 interface ApiResponse {
@@ -16,8 +16,8 @@ interface ApiResponse {
 interface RequestBody {
   query: string;
   documentation_name: string;
-  installation_name: string;
-  language: string;
+  installation_name?: string;
+  language?: string;
 }
 
 async function makeQuillopyRequest({
@@ -28,24 +28,35 @@ async function makeQuillopyRequest({
 }: {
   query: string;
   documentation_name: string;
-  installation_name: string;
-  language: string;
+  installation_name?: string;
+  language?: string;
 }): Promise<ApiResponse | null> {
   try {
-    const url = `${QUILLOPY_API_BASE}/v1/document-search/`;
+    const url = `${QUILLOPY_API_BASE}/document-search`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
 
     const requestBody: RequestBody = {
       query,
       documentation_name,
-      installation_name,
-      language,
     };
+
+    if (installation_name) {
+      requestBody.installation_name = installation_name;
+    }
+
+    if (language) {
+      requestBody.language = language;
+    }
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -53,14 +64,18 @@ async function makeQuillopyRequest({
 
     return (await response.json()) as ApiResponse;
   } catch (error) {
-    console.error("Error making Quillopy request: ", error);
+    if (error instanceof Error && error.name === "AbortError") {
+      console.error("Request timed out after 10 seconds");
+    } else {
+      console.error("Error making Quillopy request: ", error);
+    }
     return null;
   }
 }
 
 server.tool(
   "quillopy_search",
-  "This MCP searches and fetches documentation for programming libraries, packages, and frameworks. When a user types @quillopy or @quillopy[package_name], they are requesting to use this tool to access programming documentation.",
+  "This MCP searches and fetches documentation for programming libraries, packages, and frameworks. When a user types @quillopy or @quillopy[documentation_name], they are requesting to use this tool to access programming documentation.",
   {
     query: z
       .string()
@@ -72,21 +87,23 @@ server.tool(
       ),
     installation_name: z
       .string()
+      .optional()
       .describe(
-        "Name used to install the package/framework. E.g. scikit-learn for `pip install scikit-learn`"
+        "Name used to install the package/framework, only provide when relevant to improve search accuracy. E.g. scikit-learn for `pip install scikit-learn`"
       ),
     language: z
       .string()
+      .optional()
       .describe(
-        "The programming language of the package (e.g., python, javascript, java)"
+        "The programming language of the package/framework (e.g., python, javascript, java), only provide when relevant to improve search accuracy"
       ),
   },
   async ({ query, documentation_name, installation_name, language }) => {
     const response = await makeQuillopyRequest({
       query,
       documentation_name: documentation_name.toLowerCase(),
-      installation_name: installation_name.toLowerCase(),
-      language: language.toLowerCase(),
+      installation_name: installation_name?.toLowerCase(),
+      language: language?.toLowerCase(),
     });
 
     if (!response) {
