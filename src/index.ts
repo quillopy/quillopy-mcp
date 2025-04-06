@@ -27,12 +27,14 @@ async function makeQuillopyRequest({
   documentation_name,
   installation_name,
   language,
-}: {
-  query: string;
-  documentation_name: string;
-  installation_name?: string;
-  language?: string;
-}): Promise<ApiResponse | null> {
+}: RequestBody): Promise<ApiResponse | null> {
+  // Check if the QUILLOPY_API_KEY environment variable is set
+  if (!QUILLOPY_API_KEY) {
+    throw new Error(
+      "QUILLOPY_API_KEY environment variable not set. Please set this variable to use the Quillopy API."
+    );
+  }
+
   try {
     const url = `${QUILLOPY_API_BASE}/document-search`;
     const controller = new AbortController();
@@ -53,13 +55,8 @@ async function makeQuillopyRequest({
 
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${QUILLOPY_API_KEY}`,
     };
-
-    if (QUILLOPY_API_KEY) {
-      headers["Authorization"] = `Bearer ${QUILLOPY_API_KEY}`;
-    } else {
-      console.warn("Warning: QUILLOPY_API_KEY environment variable not set");
-    }
 
     const response = await fetch(url, {
       method: "POST",
@@ -111,32 +108,45 @@ server.tool(
       ),
   },
   async ({ query, documentation_name, installation_name, language }) => {
-    const response = await makeQuillopyRequest({
-      query,
-      documentation_name: documentation_name.toLowerCase(),
-      installation_name: installation_name?.toLowerCase(),
-      language: language?.toLowerCase(),
-    });
+    try {
+      const response = await makeQuillopyRequest({
+        query,
+        documentation_name: documentation_name.toLowerCase(),
+        installation_name: installation_name?.toLowerCase(),
+        language: language?.toLowerCase(),
+      });
 
-    if (!response) {
+      if (!response) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Unable to retrieve documentation. The service might be unavailable or experiencing issues. Please check your internet connection and try again later.",
+            },
+          ],
+        };
+      }
+
       return {
         content: [
           {
             type: "text",
-            text: "Unable to retrieve documentation. The service might be unavailable or experiencing issues. Please check your internet connection and try again later.",
+            text: response.response,
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Error: ${
+              error instanceof Error ? error.message : "Unknown error occurred"
+            }`,
           },
         ],
       };
     }
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: response.response,
-        },
-      ],
-    };
   }
 );
 
