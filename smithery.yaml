@@ -1,0 +1,16 @@
+# Smithery.ai configuration
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - quillopyApiKey
+    properties:
+      quillopyApiKey:
+        type: string
+        description: "The API key for the Quillopy API"
+  commandFunction:
+    # A function that produces the CLI command to start the MCP on stdio.
+    |-
+    config=>({command:'node',args:['dist/index.js'],env:{QUILLOPY_API_KEY:config.quillopyApiKey}})
