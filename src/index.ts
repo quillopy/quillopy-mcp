@@ -29,7 +29,7 @@ async function makeQuillopyRequest({
   language,
 }: RequestBody): Promise<ApiResponse | null> {
   // Check if the QUILLOPY_API_KEY environment variable is set
-  if (!QUILLOPY_API_KEY) {
+  if (!QUILLOPY_API_KEY || QUILLOPY_API_KEY.trim() === "") {
     throw new Error(
       "QUILLOPY_API_KEY environment variable not set. Please set this variable to use the Quillopy API."
     );
