@@ -15,7 +15,7 @@ This MCP server allows AI assistants to search package documentation through the
 
 ## How to Use
 
-Invoke the Quillopy tool directly in conversation by typing `@quillopy` or `@quillopy[package_name]`. You can then specify your query, programming language, and optionally a namespace to narrow the search. The tool will retrieve and display relevant documentation and links.
+Invoke the Quillopy tool directly in conversation by typing `@quillopy` or `@quillopy[documentation_name]`. Provide your search query and documentation name. You can optionally specify the programming language and installation name (if different from the documentation name) to improve search accuracy. The tool will retrieve and display relevant documentation with links.
 
 ## Installation
 
@@ -45,8 +45,11 @@ Add this to your `claude_desktop_config.json`:
 {
   "mcpServers": {
     "quillopy": {
-      "command": "node",
-      "args": ["/path/to/quillopy-mcp/build/index.js"]
+      "command": "npx",
+      "args": ["-y", "@quillopy/mcp"],
+      "env": {
+        "QUILLOPY_API_KEY": "<your-api-key>"
+      }
     }
   }
 }
@@ -61,8 +64,11 @@ Add this to your `claude_desktop_config.json`:
    {
      "name": "quillopy",
      "type": "command",
-     "command": "node",
-     "args": ["/path/to/quillopy-mcp/build/index.js"]
+     "command": "npx",
+     "args": ["-y", "@quillopy/mcp"],
+     "env": {
+       "QUILLOPY_API_KEY": "<your-api-key>"
+     }
    }
    ```
 
