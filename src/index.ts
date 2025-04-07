@@ -33,7 +33,7 @@ async function makeQuillopyRequest({
   // Check if the QUILLOPY_API_KEY environment variable is set
   if (!QUILLOPY_API_KEY || QUILLOPY_API_KEY.trim() === "") {
     throw new Error(
-      "QUILLOPY_API_KEY environment variable not set. Please set this variable to use the Quillopy API."
+      "QUILLOPY_API_KEY environment variable not set. Please set this variable to use the Quillopy API. If you don't have an API key, you can get one at https://quillopy.com"
     );
   }
 
