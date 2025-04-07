@@ -1,6 +1,6 @@
 {
   "name": "@quillopy/mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP server for quillopy - a documentation search tool for programming languages, libraries, and frameworks",
   "main": "./build/index.js",
   "type": "module",
