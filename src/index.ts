@@ -70,17 +70,29 @@ async function makeQuillopyRequest({
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      if (response.status === 401) {
+        throw new Error(
+          "Authentication failed: Your API key is invalid. Please check your QUILLOPY_API_KEY or get a new key at https://quillopy.com"
+        );
+      } else {
+        throw new Error(
+          `Server error (${response.status}): ${
+            (await response.text()) || "No additional information available."
+          }`
+        );
+      }
     }
 
     return (await response.json()) as ApiResponse;
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {
-      console.error("Request timed out after 10 seconds");
+      throw new Error(
+        "Request timed out after 10 seconds. Please check your internet connection and try again."
+      );
     } else {
-      console.error("Error making Quillopy request: ", error);
+      // Re-throw the error so it can be caught by the caller
+      throw error;
     }
-    return null;
   }
 }
 
@@ -118,15 +130,11 @@ server.tool(
         language: language?.toLowerCase(),
       });
 
+      // Check if response exists
       if (!response) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: "Unable to retrieve documentation. The service might be unavailable or experiencing issues. Please check your internet connection and try again later.",
-            },
-          ],
-        };
+        throw new Error(
+          "Failed to retrieve documentation: No response received"
+        );
       }
 
       return {
@@ -138,13 +146,20 @@ server.tool(
         ],
       };
     } catch (error) {
+      let errorMessage =
+        "An unknown error occurred while retrieving documentation";
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      console.error("Error in Quillopy search:", errorMessage);
+
       return {
         content: [
           {
             type: "text",
-            text: `Error: ${
-              error instanceof Error ? error.message : "Unknown error occurred"
-            }`,
+            text: `Error: ${errorMessage}`,
           },
         ],
       };

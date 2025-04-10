@@ -14,18 +14,30 @@ This MCP server allows AI assistants to search package documentation through the
 
 ## How to Use
 
-Invoke the Quillopy tool directly in conversation by typing `@quillopy` or `@quillopy[documentation_name]`. Provide your search query and documentation name. You can optionally specify the programming language and installation name (if different from the documentation name) to improve search accuracy. The tool will retrieve and display relevant documentation with links.
+Invoke the Quillopy tool directly in conversation by typing `@quillopy` or `@quillopy[documentation_name]`. Provide your search query and documentation name.
 
 #### API Key Requirement
 
-**Important:** You need a Quillopy API key to use this MCP server. Visit https://quillopy.com to sign up and obtain your API key.
+**Important:** You need a Quillopy API key to use this MCP server. Visit https://quillopy.com to sign up and obtain your API key (free).
 
-You can also visit the Quillopy homepage to:
+## Installing via Smithery
 
-- Check the list of currently indexed documentation
-- Request new documentation to be indexed for your projects or favorite libraries
+Smithery provides the easiest way to install and configure the Quillopy MCP across various AI assistant platforms.
 
-## Installation
+```
+# Claude
+npx -y @smithery/cli@latest install @quillopy/quillopy-mcp --client claude
+
+# Cursor
+npx -y @smithery/cli@latest install @quillopy/quillopy-mcp --client cursor
+
+# Windsurf
+npx -y @smithery/cli@latest install @quillopy/quillopy-mcp --client windsurf
+```
+
+For more information and additional integration options, visit https://smithery.ai/server/@quillopy/quillopy-mcp
+
+## Manual Installation
 
 ### Usage with Cursor
 
@@ -107,22 +119,3 @@ Add this to your `claude_desktop_config.json`:
    ```
 
 3. Save the file - Continue will automatically refresh to apply the new configuration. If the changes don't take effect immediately, try restarting your IDE.
-
-[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/HuyzbYRzwu)
-
-## Installing via Smithery
-
-Smithery provides the easiest way to install and configure the Quillopy MCP across various AI assistant platforms.
-
-```
-# Claude
-npx -y @smithery/cli@latest install @quillopy/quillopy-mcp --client claude
-
-# Cursor
-npx -y @smithery/cli@latest install @quillopy/quillopy-mcp --client cursor
-
-# Windsurf
-npx -y @smithery/cli@latest install @quillopy/quillopy-mcp --client windsurf
-```
-
-For more information and additional integration options, visit https://smithery.ai/server/@quillopy/quillopy-mcp
