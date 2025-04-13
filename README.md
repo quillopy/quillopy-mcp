@@ -10,7 +10,7 @@
 
 # Quillopy MCP — Real Docs. Real Code. Zero Hallucination.
 
-### 🧠 Your LLM is smart. But it can’t see the latest docs.
+## 🧠 Your LLM is smart. But it can’t see the latest docs.
 
 ❌ Without Quillopy:
 
@@ -18,7 +18,7 @@
 - You spend time debugging things that were never supposed to work
 - Answers are vague, outdated, or flat-out wrong
 
-### ✅ With Quillopy:
+✅ With Quillopy:
 
 Quillopy pipes accurate documentation directly into your code assistant’s context — so it generates **real**, **working**, **up-to-date** code.
 
