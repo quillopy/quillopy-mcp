@@ -90,6 +90,7 @@ For more information and additional integration options, visit https://smithery.
    }
    ```
 3. Replace `<your-api-key>` with your actual API key
+
 Check the [Cursor MCP docs](https://docs.cursor.com/context/model-context-protocol) for more infos.
 
 #### Usage with Claude Desktop
