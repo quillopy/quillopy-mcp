@@ -7,7 +7,7 @@
 
 # Quillopy MCP — Real Docs. Real Code. Zero Hallucination.
 
-![Demo](https://quillopy-cdn-bucket.s3.us-east-1.amazonaws.com/quillopy-demo.gif)
+![Demo](https://dc7rypl6linl2.cloudfront.net/quillopy-demo.gif)
 
 ## 🧠 Your LLM is smart. But it can’t see the latest docs.
 
