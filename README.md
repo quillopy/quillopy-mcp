@@ -13,19 +13,21 @@
 
 ## 🧠 Your LLM is smart. But it can’t see the latest docs.
 
-❌ Without Quillopy:
+### ❌ Without Quillopy:
 
 - You get code that references functions that were deprecated two years ago
 - You spend time debugging things that were never supposed to work
 - Answers are vague, outdated, or flat-out wrong
 
-✅ With Quillopy:
+### ✅ With Quillopy:
 
 Quillopy pipes accurate documentation directly into your code assistant’s context — so it generates **real**, **working**, **up-to-date** code.
 
 No manual uploads. No stale info. No wasted time.
 
-## How it works:
+---
+
+### How it works:
 
 1. Ask your question in Cursor (or any assistant that supports the MCPs)
 2. Behind the scenes, Quillopy injects the right docs — automatically
@@ -35,18 +37,23 @@ To explicitly activate Quillopy, just add `@quillopy` to your question — or us
 
 No hacks. No guessing. Just code that *works*.
 
-## Try it with questions like:
+---
+
+### Try it with questions like:
 
 > “How to code an agent browsing the web to fetch the latest news using browser-use? @quillopy[browser-use]”\
 > “How do I store and retrieve JSON data in Supabase? @quillopy”\
 > “How do I secure routes with the newest NextAuth? @quillopy”
 
-## Why devs are switching to Quillopy:
+---
+
+### Why devs are switching to Quillopy:
 
 ✅ Zero setup — no uploads or config\
 ✅ 600+ libraries pre-indexed and updated in real time\
 ✅ Optimized for minimal context usage (perfect for LLMs)\
 ✅ Works with any library, any version, anytime
+
 
 ## 🛠️ Getting Started
 
