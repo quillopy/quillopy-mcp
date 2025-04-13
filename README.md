@@ -7,6 +7,10 @@
 
 # Quillopy MCP — Real Docs. Real Code. Zero Hallucination.
 
+<div align="center">
+<img src="assets/demo.gif">
+</div>
+
 ## 🧠 Your LLM is smart. But it can’t see the latest docs.
 
 ❌ Without Quillopy:
