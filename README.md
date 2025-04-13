@@ -1,10 +1,7 @@
 <h3 align="center">
   <a href="https://quillopy.com">🏠 Home page</a>
-  <a>•</a>
   <a href="https://discord.gg/HuyzbYRzwu">💬 Discord</a>
-  <a>•</a>
   <a href="https://quillopy.com/documentation/all">📚 Check docs</a>
-  <a>•</a>
   <a href="https://quillopy.com/add">➕ Add docs</a>
 </h4>
 
@@ -26,7 +23,7 @@ No manual uploads. No stale info. No wasted time.
 
 ## How it works:
 
-1. Ask your question in Cursor (or any assistant that supports the Quillopy MCP)
+1. Ask your question in Cursor (or any assistant that supports the MCPs)
 2. Behind the scenes, Quillopy injects the right docs — automatically
 3. You get a code completion that actually runs
 
@@ -49,11 +46,13 @@ No hacks. No guessing. Just code that *works*.
 
 ## Getting Started
 
-### API Key Requirement
+### 1. Create an API key
 
 **Important:** You need a Quillopy API key to use this MCP server. Visit https://quillopy.com to sign up and obtain your API key (free).
 
-### Installing via Smithery
+### 2. Install the Quillopy MCP
+
+#### Option 1: Use Smithery (Recommended)
 
 Smithery provides the easiest way to install and configure the Quillopy MCP across various AI assistant platforms.
 
@@ -70,9 +69,9 @@ npx -y @smithery/cli@latest install @quillopy/quillopy-mcp --client windsurf
 
 For more information and additional integration options, visit https://smithery.ai/server/@quillopy/quillopy-mcp
 
-### Manual Installation
+#### Option 2: Manual Setup
 
-#### Usage with Cursor
+##### Cursor
 
 1. Navigate to `Settings` -> `Cursor Settings` -> `MCP` -> `+ Add new global MCP server`
 2. Copy paste the following config in `~/.cursor/.mcp.json`
@@ -91,11 +90,27 @@ For more information and additional integration options, visit https://smithery.
    ```
 3. Replace `<your-api-key>` with your actual API key
 
-Check the [Cursor MCP docs](https://docs.cursor.com/context/model-context-protocol) for more infos.
+Copy paste this to your Windsurf MCP config file. Check the [Cursor MCP docs](https://docs.cursor.com/context/model-context-protocol) for more infos.
 
-#### Usage with Claude Desktop
+##### Windsurf
+Check [Windsurf MCP docs](https://docs.windsurf.com/windsurf/mcp) for more infos.
+ ```json
+ {
+   "mcpServers": {
+     "quillopy": {
+       "command": "npx",
+       "args": ["-y", "@quillopy/mcp"],
+       "env": {
+         "QUILLOPY_API_KEY": "<your-api-key>"
+       }
+     }
+   }
+ }
+ ```
 
-Add this to your `claude_desktop_config.json`. Check [Windsurf MCP docs](https://docs.windsurf.com/windsurf/mcp) for moreinfos.
+##### Claude Desktop
+
+Add this to your `claude_desktop_config.json`.
 
 ```json
 {
@@ -111,7 +126,7 @@ Add this to your `claude_desktop_config.json`. Check [Windsurf MCP docs](https:/
 }
 ```
 
-#### Usage with Continue.dev
+##### Continue.dev
 
 1. Open your Continue.dev configuration file in either format:
 
