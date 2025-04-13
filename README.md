@@ -101,10 +101,10 @@ For more information and additional integration options, visit https://smithery.
    ```
 3. Replace `<your-api-key>` with your actual API key
 
-Copy paste this to your Windsurf MCP config file. Check the [Cursor MCP docs](https://docs.cursor.com/context/model-context-protocol) for more infos.
+Check the [Cursor MCP docs](https://docs.cursor.com/context/model-context-protocol) for more infos.
 
 ##### Windsurf
-Check [Windsurf MCP docs](https://docs.windsurf.com/windsurf/mcp) for more infos.
+Add this to your Windsurf MCP config file. Check the [Windsurf MCP docs](https://docs.windsurf.com/windsurf/mcp) for more infos.
  ```json
  {
    "mcpServers": {
