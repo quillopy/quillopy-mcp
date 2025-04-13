@@ -44,7 +44,7 @@ No hacks. No guessing. Just code that *works*.
 ✅ Optimized for minimal context usage (perfect for LLMs)\
 ✅ Works with any library, any version, anytime
 
-## Getting Started
+## 🛠️ Getting Started
 
 ### 1. Create an API key
 
