@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { makeQuillopyRequest } from "./lib/api.js";
+import { makeQuillopyRequest, makeChatWithCodeRequest } from "./lib/api.js";
 
 const VERSION = "0.1.0";
 
@@ -62,20 +62,67 @@ server.tool(
         ],
       };
     } catch (error) {
-      let errorMessage =
-        "An unknown error occurred while retrieving documentation";
+      let errorMessage = "An error occurred while retrieving documentation";
 
       if (error instanceof Error) {
         errorMessage = error.message;
       }
 
-      console.error("Error in Quillopy search:", errorMessage);
+      console.error("Error in Quillopy documentation search:", errorMessage);
 
       return {
         content: [
           {
             type: "text",
-            text: `Error: ${errorMessage}`,
+            text: `Documentation search error: ${errorMessage}`,
+          },
+        ],
+      };
+    }
+  }
+);
+
+server.tool(
+  "quillopy_chat_with_code",
+  "This tool enables chat with code in a GitHub repository. Only use when explicitly requested by the user. Inform the user that responses may take up to 1 minute to generate.",
+  {
+    query: z.string().describe("The question about the GitHub repository code"),
+    githubRepoUrl: z.string().describe("The URL of the GitHub repository"),
+  },
+  async ({ query, githubRepoUrl }) => {
+    try {
+      const response = await makeChatWithCodeRequest({
+        query,
+        githubRepoUrl,
+      });
+
+      // Check if response exists
+      if (!response) {
+        throw new Error("Failed to chat with code: No response received");
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: response.response,
+          },
+        ],
+      };
+    } catch (error) {
+      let errorMessage = "An error occurred while chatting with code";
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      console.error("Error in Quillopy code chat:", errorMessage);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Code chat error: ${errorMessage}`,
           },
         ],
       };
