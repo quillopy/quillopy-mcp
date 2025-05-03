@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/quillopy-quillopy-mcp-badge.png)](https://mseep.ai/app/quillopy-quillopy-mcp)
+
 <h3 align="center">
   <a href="https://quillopy.com">🏠 Home page</a>
   <a href="https://discord.gg/HuyzbYRzwu">💬 Discord</a>
